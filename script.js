@@ -1,22 +1,30 @@
-var fname,lname,email;
-function getValues(e) {
-    e.preventDefault();
-  fname=document.getElementById("fname").value;
-  lname=document.getElementById("lname").value;
-   email=document.getElementById("email").value;
-  
-   console.log(fname);
-   //window.location.href="register.html?fname="+fname+'&lname='+lname+'&email='+email;
-   
-}
+$(document).ready(function(){
 
-function display(){
-    const query=window.location.search;
-    const param=new URLSearchParams(query);
-    const rfname=param.get('fname');
-    const rlname=param.get('lname');
-    const remail=param.get('email');
-    document.getElementById("recipient-name").value=rfname;
-    document.getElementById("message-text").value=rlname;
-    document.getElementById("remail").value=remail;
-}
+    var myList = [];
+    var mySelect = $('#cars');
+
+    $.getJSON('http://localhost:3000/names', function(data) { 
+        const dataNum = data.length;
+        
+        $.each(data, function(index, value) {
+            mySelect.append(
+                $('<option></option>').val(value).html(value)
+            );
+            if (dataNum-1 === index)
+            {
+                loadMultiselect();
+            }
+        });
+    }); 
+
+    function loadMultiselect()
+    {
+        mySelect.multiselect({includeSelectAllOption: true,
+            onChange: function() {
+                console.log($('#cars').val());
+                myList = $('#cars').val()
+                console.log("This is mylist-" + myList);
+            }
+        }); 
+    }
+  });
